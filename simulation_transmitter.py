@@ -1,9 +1,7 @@
- simulation_transmitter.
-import socket, ustruct as struct, time, math, random
-
-SERVER_IP = "127.0.0.1"
+import socket, struct, time, math, random
+SERVER_IP = "0.0.0.1"
 PORT = 5005
-FMT = ">HQIfffffffH"
+FMT = ">HQIfffffffffH"
 SZ = struct.calcsize(FMT)
 PL_LEN = SZ - 2
 MAGIC = 0x55AA
@@ -47,7 +45,7 @@ def start_binary_transmitter():
             ts = int(time.time() * 1000000)
             
             # Structural Pack Step
-            struct.pack_into(FMT, write_buffer, 0, MAGIC, ts, sequence_id, x_pos, y_pos, z_pos, vx_vel, vy_vel, vz_vel, current_ph, 0)
+            struct.pack_into(FMT, write_buffer, 0, MAGIC, ts, sequence_id, x_pos, y_pos, z_pos, vx_vel, vy_vel, vz_vel, current_ph, 0, 0, 0)
             
             # Compute Cryptographic Data Integrity Fletcher-16 Tail Checklist
             s1 = s2 = 0
@@ -61,5 +59,3 @@ def start_binary_transmitter():
     except KeyboardInterrupt: print("\n[TRANSMITTER]: Stream closed safely.")
 
 if __name__ == "__main__": start_binary_transmitter()
-
-
